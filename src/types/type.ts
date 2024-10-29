@@ -4,8 +4,9 @@ export interface Movie {
   imdbID: string;
   Type: string;
   Poster: string;
-}
+  email?: string;
 
+}
 export interface SearchResponse {
   Search: Movie[];
   totalResults: string;
@@ -50,3 +51,18 @@ export interface Review {
   comment: string;
   createdAt: string;
 }
+
+ export interface User {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface AuthContextType {
+  isAuthenticated: boolean;
+  currentUser: User | null;
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (name: string, email: string, password: string) => Promise<boolean>;
+  logout: () => void;
+}
+

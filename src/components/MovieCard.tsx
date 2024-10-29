@@ -64,14 +64,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/movies/${movie.imdbID}`); // Redirect to the movie details page
+    navigate(`/movies/${movie.imdbID}`); 
   };
 
   return (
     <Card onClick={handleClick}>
       <PosterContainer>
         <Poster
-          src={movie.Poster !== 'N/A' ? movie.Poster : '/placeholder-movie.jpg'}
+          src={movie.Poster !== 'N/A' ? movie.Poster : 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg'}
           alt={movie.Title}
         />
       </PosterContainer>

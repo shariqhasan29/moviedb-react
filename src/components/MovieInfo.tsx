@@ -42,7 +42,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie }) => {
   return (
     
     <InfoContainer>
-      <div style={{ backgroundColor: '#F0F8FF', boxShadow: 'inset 8px 10px 46px -18px rgba(0,0,0,0.75)', padding: '20px', borderRadius: '8px'}}>
+      <div style={{ backgroundColor: 'inherit', boxShadow: 'inset 8px 10px 46px -18px rgba(0,0,0,0.75)', padding: '20px', borderRadius: '8px'}}>
         <Poster src={movie.Poster} alt={movie.Title} />
       <Title>{movie.Title}</Title>
       <Details><strong>Released:</strong> {movie.Released}</Details>

@@ -1,8 +1,9 @@
+// UserActions.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWatchlist } from '../contexts/WatchlistContext';
 import { styled } from '@mui/material/styles';
-import { Button, TextField, Paper, Snackbar, Alert } from '@mui/material';
+import { Button, Paper, Snackbar, Alert } from '@mui/material';
 
 const ActionsContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -31,8 +32,7 @@ const UserActions: React.FC<UserActionsProps> = ({ movieId, title, image }) => {
   const navigate = useNavigate();
 
   const handleAddToWatchlist = () => {
-    // Check if movie already exists in watchlist
-    const isMovieInWatchlist = watchlist.some(movie => movie.id === movieId);
+    const isMovieInWatchlist = watchlist.some(movie => movie.id === movieId && movie.userId === localStorage.getItem("currentUserId"));
 
     if (isMovieInWatchlist) {
       setSnackbarMessage('This movie is already in your watchlist!');
@@ -46,7 +46,8 @@ const UserActions: React.FC<UserActionsProps> = ({ movieId, title, image }) => {
       title,
       image,
       review,
-      isLiked
+      isLiked,
+      userId: localStorage.getItem("currentUserId") || "", // Add userId
     };
     addToWatchlist(movie);
     setSnackbarMessage('Movie successfully added to watchlist!');
@@ -54,58 +55,55 @@ const UserActions: React.FC<UserActionsProps> = ({ movieId, title, image }) => {
     setOpenSnackbar(true);
   };
 
-  const handleLike = () => {
-    setIsLiked(prev => !prev);
-    // If movie is in watchlist, update its like status
-    const movie = watchlist.find(m => m.id === movieId);
-    if (movie) {
-      addToWatchlist({
-        ...movie,
-        isLiked: !isLiked
-      });
-    }
-  };
+  // const handleLike = () => {
+  //   setIsLiked(prev => !prev);
+  //   const movie = watchlist.find(m => m.id === movieId && m.userId === localStorage.getItem("currentUserId"));
+  //   if (movie) {
+  //     addToWatchlist({
+  //       ...movie,
+  //       isLiked: !isLiked
+  //     });
+  //   }
+  // };
 
-  const handleReviewChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReview(event.target.value);
-  };
+  // const handleReviewChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setReview(event.target.value);
+  // };
 
-  const handleSubmitReview = (event: React.FormEvent) => {
-    event.preventDefault();
-    const movie = watchlist.find(m => m.id === movieId);
+  // const handleSubmitReview = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  //   const movie = watchlist.find(m => m.id === movieId && m.userId === localStorage.getItem("currentUserId"));
     
-    if (movie) {
-      // Update existing movie
-      addToWatchlist({
-        ...movie,
-        review,
-        isLiked
-      });
-      setSnackbarMessage('Review updated successfully!');
-    } else {
-      // Add new movie with review
-      const newMovie = {
-        id: movieId,
-        title,
-        image,
-        review,
-        isLiked
-      };
-      addToWatchlist(newMovie);
-      setSnackbarMessage('Movie added to watchlist with review!');
-    }
-    setSnackbarSeverity('success');
-    setOpenSnackbar(true);
-    setReview('');
-  };
+  //   if (movie) {
+  //     addToWatchlist({
+  //       ...movie,
+  //       review,
+  //       isLiked
+  //     });
+  //     setSnackbarMessage('Review updated successfully!');
+  //   } else {
+  //     const newMovie = {
+  //       id: movieId,
+  //       title,
+  //       image,
+  //       review,
+  //       isLiked,
+  //       userId: localStorage.getItem("currentUserId") || "",
+  //     };
+  //     addToWatchlist(newMovie);
+  //     setSnackbarMessage('Movie added to watchlist with review!');
+  //   }
+  //   setSnackbarSeverity('success');
+  //   setOpenSnackbar(true);
+  //   setReview('');
+  // };
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
 
-  // Check if movie is in watchlist and set initial states
   React.useEffect(() => {
-    const movie = watchlist.find(m => m.id === movieId);
+    const movie = watchlist.find(m => m.id === movieId && m.userId === localStorage.getItem("currentUserId"));
     if (movie) {
       setIsLiked(movie.isLiked);
       setReview(movie.review);
@@ -122,15 +120,15 @@ const UserActions: React.FC<UserActionsProps> = ({ movieId, title, image }) => {
         Add to Watchlist
       </StyledButton>
       
-      <StyledButton 
+      {/* <StyledButton 
         variant="contained" 
         color={isLiked ? "success" : "primary"} 
         onClick={handleLike}
       >
         {isLiked ? 'Unlike' : 'Like'}
-      </StyledButton>
+      </StyledButton> */}
 
-      <form onSubmit={handleSubmitReview} style={{ width: '100%' }}>
+      {/* <form onSubmit={handleSubmitReview} style={{ width: '100%' }}>
         <TextField
           fullWidth
           multiline
@@ -148,7 +146,7 @@ const UserActions: React.FC<UserActionsProps> = ({ movieId, title, image }) => {
         >
           Submit Review
         </StyledButton>
-      </form>
+      </form> */}
 
       <StyledButton 
         variant="outlined" 

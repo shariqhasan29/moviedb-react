@@ -8,7 +8,7 @@ import { searchMovies, getMovieDetails, getInitialMovies } from '../services/api
 
 
 const Container = styled.div`
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1rem;
   
@@ -57,12 +57,12 @@ const MovieDB: React.FC = () => {
   };
 
   if (searchError) {
-    return <Error>Error loading movies. Please try again later.</Error>;
+    return <Error><div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Error Loading Movies...</div></Error>;
   }
 
   return (
     <Container>
-      <Title>Movie Database</Title>
+      <Title>Enjoy Your Favorite Movies</Title>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%'}}>
       <SearchBar 
         value={searchQuery} 
@@ -73,12 +73,19 @@ const MovieDB: React.FC = () => {
       </div>
       
       {searchLoading ? (
-        <Loading>Loading movies...</Loading>
+        <Loading><div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',}}>Please Wait a moment...</div></Loading>
       ) : (
-        <MovieGrid 
-          movies={searchResults || []} 
-          onMovieClick={handleMovieClick}
-        />
+        <>
+          {searchResults && searchResults.length > 0 ? (
+            <MovieGrid 
+              movies={searchResults} 
+              onMovieClick={handleMovieClick}
+            />
+          ) : (
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',}}>No movies found</div>
+          )}
+        </>
+        
       )}
       {selectedMovie && (
         <MovieDetailsModal 

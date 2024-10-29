@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ username }) => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', backgroundColor: '#002244', borderBottom: '1px solid #ccc' }}>
-      <h1 style={{ color: '#fff'}}>Welcome, {username.charAt(0).toUpperCase() + username.slice(1)}!</h1>
+      <h1 style={{ color: '#fff'}}>Welcome, {username ? username.charAt(0).toUpperCase() + username.slice(1) : 'Admin'}!</h1>
       <div style={{ display: 'flex', gap: '30px' }}>
       {location.pathname === '/watchlist' ? (
           <StyledButton onClick={handleHome} variant="contained" color="inherit">

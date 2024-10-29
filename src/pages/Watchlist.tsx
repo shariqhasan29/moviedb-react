@@ -1,185 +1,116 @@
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useWatchlist } from '../contexts/WatchlistContext';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Button,
-  styled
-} from '@mui/material';
+import { useAuth } from '../contexts/AuthContext';
+import * as S from './watchlist.styled';
 import Navbar from '../components/Navbar';
-
-
-// Styled components
-const Container = styled('div')({
-  padding: '2rem',
-  maxWidth: '1200px',
-  margin: '0 auto',
-});
-
-const Title = styled(Typography)({
-  marginBottom: '2rem',
-  textAlign: 'center',
-});
-
-const ImageContainer = styled('div')({
-  width: '80px',
-  height: '120px',
-  '& img': {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    borderRadius: '4px',
-  },
-});
-
-const StyledTableCell = styled(TableCell)({
-  fontWeight: 'bold',
-});
-
-const StatusChip = styled('span')<{ isliked: number }>(({ isliked }) => ({
-  padding: '4px 8px',
-  borderRadius: '4px',
-  backgroundColor: isliked ? '#e8f5e9' : '#ffebee',
-  color: isliked ? '#2e7d32' : '#c62828',
-  fontSize: '0.875rem',
-}));
-
-// Types
-type Movie = {
-  id: string;
-  title: string;
-  image: string;
-  review: string;
-  isLiked: boolean;
-};
+import BackButton from '../components/BackButton';
 
 const WatchlistPage = () => {
-  const { watchlist, removeFromWatchlist } = useWatchlist();
-  const columnHelper = createColumnHelper<Movie>();
+  const { userWatchlist, removeFromWatchlist, updateMovieReview, toggleLike } = useWatchlist();
+  const { currentUser, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [editingReview, setEditingReview] = useState<string | null>(null);
+  const [reviewText, setReviewText] = useState('');
 
-  const columns = [
-    columnHelper.accessor('title', {
-      header: 'Movie Name',
-      cell: info => (
-        <Typography variant="body1" fontWeight="medium">
-          {info.getValue()}
-        </Typography>
-      ),
-    }),
-    columnHelper.accessor('image', {
-      header: 'Image',
-      cell: info => (
-        <ImageContainer>
-          <img src={info.getValue()} alt={info.row.original.title} />
-        </ImageContainer>
-      ),
-    }),
-    columnHelper.accessor('review', {
-      header: 'Review',
-      cell: info => (
-        <Typography variant="body2">
-          {info.getValue() || 'No review'}
-        </Typography>
-      ),
-    }),
-    columnHelper.accessor('isLiked', {
-      header: 'Status',
-      cell: info => (
-        <StatusChip isliked={info.getValue() ? 1 : 0}>
-          {info.getValue() ? 'Liked' : 'Not Liked'}
-        </StatusChip>
-      ),
-    }),
-    columnHelper.accessor('id', {
-      header: 'Action',
-      cell: info => (
-        <Button
-          variant="contained"
-          color="error"
-          size="small"
-          onClick={() => removeFromWatchlist(info.getValue())}
-        >
-          Remove
-        </Button>
-      ),
-    }),
-  ];
+  // Redirect if not authenticated
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
-  const table = useReactTable({
-    data: watchlist,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const handleReviewSubmit = (movieId: string) => {
+    updateMovieReview(movieId, reviewText);
+    setEditingReview(null);
+    setReviewText('');
+  };
 
-  
-
-  const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
-
-  
+  if (!currentUser) {
+    return null;
+  }
 
   return (
     <>
-    <Navbar username={user.name} />
-    <Container>
+    <Navbar username={currentUser.name} />
+    <BackButton />
+    <S.Container>
       
-        <Title variant="h4">Your Watchlist</Title>
+      <S.Header>
+        <S.Title>My Watchlist</S.Title>
+      </S.Header>
 
-      
-      
-
-      {watchlist.length === 0 ? (
-        <Paper sx={{ p: 3, textAlign: 'center' }}>
-          <Typography color="textSecondary">
-            Your watchlist is currently empty
-          </Typography>
-        </Paper>
+      {userWatchlist.length === 0 ? (
+        <S.EmptyState>
+          <S.EmptyText>Your watchlist is empty</S.EmptyText>
+          <S.Button onClick={() => navigate('/home')}>Browse Movies</S.Button>
+        </S.EmptyState>
       ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <StyledTableCell key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </StyledTableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map(row => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <S.MovieGrid>
+          {userWatchlist.map(movie => (
+            <S.MovieCard key={movie.id}>
+              <S.MovieImage src={movie.image} alt={movie.title} />
+              <S.MovieContent>
+                <S.MovieTitle>{movie.title}</S.MovieTitle>
+                
+                {editingReview === movie.id ? (
+                  <S.ReviewForm onSubmit={(e) => {
+                    e.preventDefault();
+                    handleReviewSubmit(movie.id);
+                  }}>
+                    <S.ReviewInput
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      placeholder="Write your review..."
+                    />
+                    <S.Button type="submit">Save</S.Button>
+                    <S.Button 
+                      type="button" 
+                      onClick={() => setEditingReview(null)}
+                      variant="secondary"
+                    >
+                      Cancel
+                    </S.Button>
+                  </S.ReviewForm>
+                ) : (
+                  <S.ReviewSection>
+                    <S.Review>{movie.review || 'No review yet'}</S.Review>
+                    <S.Button 
+                      onClick={() => {
+                        setEditingReview(movie.id);
+                        setReviewText(movie.review);
+                      }}
+                      variant="secondary"
+                    >
+                      {movie.review ? 'Edit Review' : 'Add Review'}
+                    </S.Button>
+                  </S.ReviewSection>
+                )}
+
+                <S.Actions>
+                  <S.LikeButton 
+                    onClick={() => toggleLike(movie.id)}
+                    isLiked={movie.isLiked}
+                  >
+                    {movie.isLiked ? '❤️' : '🤍'}
+                  </S.LikeButton>
+                  <S.Button 
+                    onClick={() => {
+                      if (window.confirm('Remove this movie from your watchlist?')) {
+                        removeFromWatchlist(movie.id);
+                      }
+                    }}
+                    variant="danger"
+                  >
+                    Remove
+                  </S.Button>
+                </S.Actions>
+              </S.MovieContent>
+            </S.MovieCard>
+          ))}
+        </S.MovieGrid>
       )}
-    </Container>
+    </S.Container>
     </>
   );
 };

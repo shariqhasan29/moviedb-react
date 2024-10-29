@@ -6,6 +6,8 @@ import { WatchlistProvider } from './contexts/WatchlistContext';
 
 const queryClient = new QueryClient();
 function App() {
+
+  
   return (
     <QueryClientProvider client={queryClient}>
     <AuthProvider>

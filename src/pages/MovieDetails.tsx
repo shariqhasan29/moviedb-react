@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { getMovieDetails } from '../services/api';
-import MovieInfo from '../components/MovieInfo'; // Component to show movie details
-import UserActions from '../components/UserActions'; // Component for user actions
+import MovieInfo from '../components/MovieInfo'; 
+import UserActions from '../components/UserActions'; 
 import Navbar from '../components/Navbar';
 
 const PageContainer = styled.div`
@@ -32,25 +32,25 @@ const MovieDetailsPage: React.FC = () => {
     enabled: !!id,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading movie details.</div>;
-  if (!movie) return <div>No movie found.</div>;
+  if (isLoading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'} }>Loading...</div>;
+  if (error) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Error loading movie details.</div>;
+  if (!movie) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>No movie found.</div>;
 
   const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
   return (
     <>
     <Navbar username={user.name}/>
-    <div style={{backgroundColor: '#F0F8FF', boxShadow: 'inset 8px 10px 46px -18px rgba(0,0,0,0.75)'}}>
+    
     <PageContainer>      
       <DetailsContainer>
-        <MovieInfo movie={movie} /> {/* Movie details component */}
+        <MovieInfo movie={movie} /> 
       </DetailsContainer>
       <ActionsContainer>
-        <UserActions movieId={movie.imdbID} title={movie.Title} image={movie.Poster} /> {/* User actions component */}
+        <UserActions movieId={movie.imdbID} title={movie.Title} image={movie.Poster} /> 
       </ActionsContainer>
     </PageContainer>
-    </div>
+
     </>
   );
 };
