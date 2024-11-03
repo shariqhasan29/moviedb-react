@@ -6,6 +6,8 @@ import WatchlistPage from '../pages/Watchlist';
 
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 
+const baseUrl = import.meta.env.BASE_URL
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -27,5 +29,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Navigate to="/login" replace />
   }
-]);
+],
+  {
+  basename: baseUrl, // This ensures routes work with the GitHub Pages base path
+  }
+);
 
