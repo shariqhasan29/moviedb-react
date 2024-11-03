@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { MovieDetails } from '../types/type';
+import React from "react";
+import styled from "styled-components";
+import { MovieDetails } from "../types/type";
 
 const Overlay = styled.div`
   position: fixed;
@@ -35,7 +35,7 @@ const CloseButton = styled.button`
   font-size: 1.5rem;
   cursor: pointer;
   color: #666;
-  
+
   &:hover {
     color: #333;
   }
@@ -45,7 +45,7 @@ const DetailsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 2rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -61,7 +61,7 @@ const Info = styled.div`
     margin: 0 0 1rem 0;
     color: #333;
   }
-  
+
   p {
     margin: 0.5rem 0;
     color: #666;
@@ -82,7 +82,10 @@ interface MovieDetailsModalProps {
   onClose: () => void;
 }
 
-const MovieDetailsModal: React.FC<MovieDetailsModalProps> = ({ movie, onClose }) => {
+const MovieDetailsModal: React.FC<MovieDetailsModalProps> = ({
+  movie,
+  onClose,
+}) => {
   return (
     <Overlay onClick={onClose}>
       <Modal onClick={(e) => e.stopPropagation()}>
@@ -91,12 +94,22 @@ const MovieDetailsModal: React.FC<MovieDetailsModalProps> = ({ movie, onClose })
           <Poster src={movie.Poster} alt={movie.Title} />
           <Info>
             <h1>{movie.Title}</h1>
-            <p><strong>Released:</strong> {movie.Released}</p>
-            <p><strong>Runtime:</strong> {movie.Runtime}</p>
-            <p><strong>Genre:</strong> {movie.Genre}</p>
-            <p><strong>Director:</strong> {movie.Director}</p>
+            <p>
+              <strong>Released:</strong> {movie.Released}
+            </p>
+            <p>
+              <strong>Runtime:</strong> {movie.Runtime}
+            </p>
+            <p>
+              <strong>Genre:</strong> {movie.Genre}
+            </p>
+            <p>
+              <strong>Director:</strong> {movie.Director}
+            </p>
             <Rating>IMDb Rating: {movie.imdbRating}/10</Rating>
-            <p><strong>Plot:</strong></p>
+            <p>
+              <strong>Plot:</strong>
+            </p>
             <p>{movie.Plot}</p>
           </Info>
         </DetailsGrid>

@@ -1,7 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
-  
   padding: 2rem;
   margin: 0 auto;
   max-width: 1400px;
@@ -90,7 +89,9 @@ export const Actions = styled.div`
   margin-top: 1rem;
 `;
 
-export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' }>`
+export const Button = styled.button<{
+  variant?: "primary" | "secondary" | "danger";
+}>`
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: none;
@@ -98,15 +99,15 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'dange
   font-weight: 500;
   transition: background-color 0.2s;
 
-  ${({ variant = 'primary' }) => {
+  ${({ variant = "primary" }) => {
     switch (variant) {
-      case 'secondary':
+      case "secondary":
         return `
           background-color: #f0f0f0;
           color: #333;
           &:hover { background-color: #e0e0e0; }
         `;
-      case 'danger':
+      case "danger":
         return `
           background-color: #ff4444;
           color: white;

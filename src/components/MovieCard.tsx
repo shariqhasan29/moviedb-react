@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Movie } from '../types/type';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Movie } from "../types/type";
+import { useNavigate } from "react-router-dom";
 
 const Card = styled.div`
   background: white;
@@ -12,7 +12,7 @@ const Card = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  
+
   &:hover {
     transform: translateY(-4px);
     cursor: pointer;
@@ -60,18 +60,21 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
-
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/movies/${movie.imdbID}`); 
+    navigate(`/movies/${movie.imdbID}`);
   };
 
   return (
     <Card onClick={handleClick}>
       <PosterContainer>
         <Poster
-          src={movie.Poster !== 'N/A' ? movie.Poster : 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg'}
+          src={
+            movie.Poster !== "N/A"
+              ? movie.Poster
+              : "https://www.prokerala.com/movies/assets/img/no-poster-available.jpg"
+          }
           alt={movie.Title}
         />
       </PosterContainer>

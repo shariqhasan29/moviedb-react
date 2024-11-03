@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import MovieCard from './MovieCard';
-import { Movie } from '../types/type';
+import React from "react";
+import styled from "styled-components";
+import MovieCard from "./MovieCard";
+import { Movie } from "../types/type";
 
 const Grid = styled.div`
   display: grid;

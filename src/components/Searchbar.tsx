@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const SearchContainer = styled.div`
   margin: 2rem 0;
@@ -12,7 +12,7 @@ const Input = styled.input`
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;

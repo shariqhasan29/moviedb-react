@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { MovieDetails } from '../types/type';
+import React from "react";
+import styled from "styled-components";
+import { MovieDetails } from "../types/type";
 
 const InfoContainer = styled.div`
   background: white;
@@ -40,21 +40,36 @@ interface MovieInfoProps {
 
 const MovieInfo: React.FC<MovieInfoProps> = ({ movie }) => {
   return (
-    
     <InfoContainer>
-      <div style={{ backgroundColor: 'inherit', boxShadow: 'inset 8px 10px 46px -18px rgba(0,0,0,0.75)', padding: '20px', borderRadius: '8px'}}>
+      <div
+        style={{
+          backgroundColor: "inherit",
+          boxShadow: "inset 8px 10px 46px -18px rgba(0,0,0,0.75)",
+          padding: "20px",
+          borderRadius: "8px",
+        }}
+      >
         <Poster src={movie.Poster} alt={movie.Title} />
-      <Title>{movie.Title}</Title>
-      <Details><strong>Released:</strong> {movie.Released}</Details>
-      <Details><strong>Runtime:</strong> {movie.Runtime}</Details>
-      <Details><strong>Genre:</strong> {movie.Genre}</Details>
-      <Details><strong>Director:</strong> {movie.Director}</Details>
-      <Rating>IMDb Rating: {movie.imdbRating}/10</Rating>
-      <Details><strong>Plot:</strong></Details>
-      <Details>{movie.Plot}</Details>
+        <Title>{movie.Title}</Title>
+        <Details>
+          <strong>Released:</strong> {movie.Released}
+        </Details>
+        <Details>
+          <strong>Runtime:</strong> {movie.Runtime}
+        </Details>
+        <Details>
+          <strong>Genre:</strong> {movie.Genre}
+        </Details>
+        <Details>
+          <strong>Director:</strong> {movie.Director}
+        </Details>
+        <Rating>IMDb Rating: {movie.imdbRating}/10</Rating>
+        <Details>
+          <strong>Plot:</strong>
+        </Details>
+        <Details>{movie.Plot}</Details>
       </div>
     </InfoContainer>
-   
   );
 };
 
